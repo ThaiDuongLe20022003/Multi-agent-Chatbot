@@ -1,0 +1,112 @@
+{
+  "timestamp": "2025-09-26T10:05:52.561573",
+  "query": "I need information of \"The acts restricted by copyright in a work\"",
+  "response": "**The acts restricted by copyright in a work** (as set out in the UK *Copyright, Designs and Patents Act 1988*, Section 16) are the exclusive rights that the owner of the copyright holds.  In other words, anyone who does any of these acts **without the copyright owner’s licence** is infringing the copyright.\n\n| # | Act | How it is typically understood |\n|---|-----|--------------------------------|\n| **a** | **Copy the work** | Making a duplicate of the original (digital or physical). |\n| **b** | **Issue copies of the work to the public** | Distributing copies to the public (e.g., selling, giving away, making available on the internet). |\n| **c** | **Rent or lend the work to the public** | Allowing a person to use the work for a period of time (e.g., renting a DVD, lending a book). |\n| **d** | **Perform, show or play the work in public** | Publicly performing music, showing a film, performing a play, or playing a game in a public venue. |\n| **e** | **Communicate the work to the public** | Transmitting the work so that a member of the public can access it (e.g., streaming, broadcasting, posting online). |\n| **f** | **Make an adaptation of the work (or any of the above in relation to an adaptation)** | Altering, translating, remixing, remixing a work or creating a derivative that incorporates any of the above acts. |\n\nThese six categories are collectively referred to in the Act as **the “acts restricted by the copyright.”**  In Section 16(2), the Act states that the copyright is infringed whenever any of these acts are performed **without the licence of the copyright owner.**\n\n> *“Copyright in a work is infringed by a person who, without the licence of the copyright owner, does, or authorises another to do, any of the acts restricted by the copyright.”*  \n\n(UK C&DPA 1988, § 16(2))\n\nThese provisions form the core of the exclusive rights that copyright holders enjoy over their works in the United Kingdom.",
+  "context": "Document 1: 39 \n \nChapter II \n \nRights of Copyright Owner \n \nThe acts restricted by copyright \n \n16  The acts restricted by copyright in a work \n \n(1)     The owner of the copyright in a work has, in accordance with the following \nprovisions of this Chapter, the exclusive right to do the following acts in the United \nKingdom-- \n(a)     to copy the work (see section 17); \n(b)     to issue copies of the work to the public (see section 18); \n(ba)     to rent or lend the work to the public (see section 18A); \n(c)     to perform, show or play the work in public (see section 19); \n(d)     to communicate the work to the public (see section 20); \n(e)     to make an adaptation of the work or do any of the above in relation to an \nadaptation (see section 21); \nand those acts are referred to in this Part as the \"acts restricted by the copyright\". \n(2)     Copyright in a work is infringed by a person who without the licence of the...\n\nDocument 2: and those acts are referred to in this Part as the \"acts restricted by the copyright\". \n(2)     Copyright in a work is infringed by a person who without the licence of the \ncopyright owner does, or authorises another to do, any of the acts restricted by the \ncopyright. \n(3)     References in this Part to the doing of an act restricted by the copyright in a work \nare to the doing of it-- \n(a)     in relation to the work as a whole or any substantial part of it, and \n(b)     either directly or indirectly; \nand it is immaterial whether any intervening acts themselves infringe copyright. \n(4)     This Chapter has effect subject to-- \n(a)     the provisions of Chapter III (acts permitted in relation to copyright works), and \n(b)     the provisions of Chapter VII (provisions with respect to copyright licensing)....\n\nDocument 3: 47 \n \nChapter III \n \nActs Permitted in relation to Copyright Works \n \nIntroductory \n \n28  Introductory provisions \n \n(1)     The provisions of this Chapter specify acts which may be done in relation to \ncopyright works notwithstanding the subsistence of copyright; they relate only to the \nquestion of infringement of copyright and do not affect any other right or obligation \nrestricting the doing of any of the specified acts. \n(2)     Where it is provided by this Chapter that an act does not infringe copyright, or may \nbe done without infringing copyright, and no particular description of copyright work is \nmentioned, the act in question does not infringe the copyright in a work of any \ndescription. \n(3)     No inference shall be drawn from the description of any act which may by virtue of \nthis Chapter be done without infringing copyright as to the scope of the acts restricted by \nthe copyright in any description of work....\n\nDocument 4: (1)     The owner of the copyright in a work of any description has the exclusive right to \ndo the acts specified in Chapter II as the acts restricted by the copyright in a work of that \ndescription. \n(2)     In relation to certain descriptions of copyright work the following rights conferred \nby Chapter IV (moral rights) subsist in favour of the author, director or commissioner of \nthe work, whether or not he is the owner of the copyright-- \n(a)     section 77 (right to be identified as author or director), \n(b)     section 80 (right to object to derogatory treatment of work), and \n(c)     section 85 (right to privacy of certain photographs and films)....",
+  "response_time": 37.4363899230957,
+  "token_count": 336,
+  "tokens_per_second": 8.975224392368851,
+  "model": "gpt-oss:20b",
+  "session_id": "streamlit_session",
+  "evaluations": [
+    {
+      "faithfulness": 9.0,
+      "groundedness": 9.0,
+      "factual_consistency": 9.2,
+      "relevance": 8.8,
+      "completeness": 7.5,
+      "fluency": 9.5,
+      "overall_score": 8.9,
+      "evaluation_notes": "Good: The response accurately synthesizes information from the provided context and is free of hallucinations or irrelevant details. All information can be traced back to the documents with minor elaboration. The answer is factually accurate, relevant to the query, covers key aspects, but lacks some depth in completeness due to a simplified presentation.",
+      "judge_model": "command-r7b:7b"
+    },
+    {
+      "faithfulness": 9.5,
+      "groundedness": 9.5,
+      "factual_consistency": 9.7,
+      "relevance": 9.2,
+      "completeness": 8.0,
+      "fluency": 9.3,
+      "overall_score": 8.9,
+      "evaluation_notes": "Good: The response is highly faithful and grounded in the provided context, accurately reflects factual details, and effectively addresses the query. However, it slightly overlooks some minor nuances in completeness.",
+      "judge_model": "falcon3:7b"
+    },
+    {
+      "faithfulness": 9.0,
+      "groundedness": 10.0,
+      "factual_consistency": 9.5,
+      "relevance": 9.2,
+      "completeness": 8.5,
+      "fluency": 9.0,
+      "overall_score": 9.17,
+      "evaluation_notes": "Excellent: The response accurately reflects the provided context, maintains factual consistency with Sections 16-21 of the Act, and comprehensively addresses the query about restricted acts under copyright law in the UK.",
+      "judge_model": "cogito:14b"
+    },
+    {
+      "faithfulness": 9.0,
+      "groundedness": 10.0,
+      "factual_consistency": 8.5,
+      "relevance": 8.3,
+      "completeness": 7.0,
+      "fluency": 9.5,
+      "overall_score": 8.666666666666671,
+      "evaluation_notes": "Good: The response provides a clear and concise summary of the acts restricted by copyright in a work, based on the given context and query. However, it does not provide any additional information beyond what is contained in the documents provided.",
+      "judge_model": "deepseek-llm:7b"
+    },
+    {
+      "faithfulness": 8.5,
+      "groundedness": 9.0,
+      "factual_consistency": 9.2,
+      "relevance": 8.8,
+      "completeness": 7.5,
+      "fluency": 9.5,
+      "overall_score": 8.7,
+      "evaluation_notes": "Good: The response is mostly based on the provided context and accurately represents the acts restricted by copyright as per the UK Copyright, Designs and Patents Act 1988. However, it could be more complete regarding the rights conferred by Chapter IV (moral rights) in Document 4 that subsist in favour of the author or director of a work.",
+      "judge_model": "mistral:7b"
+    },
+    {
+      "faithfulness": 8.5,
+      "groundedness": 9.0,
+      "factual_consistency": 9.2,
+      "relevance": 8.8,
+      "completeness": 7.5,
+      "fluency": 9.5,
+      "overall_score": 8.7,
+      "evaluation_notes": "Good: The response is mostly faithful to the context, but it does include some information not explicitly stated (e.g., 'as set out in the UK *Copyright, Designs and Patents Act 1988*, Section 16'). However, the response is grounded in the provided documents. The factual consistency is high, with a minor discrepancy regarding the numbering of the acts restricted by copyright. The response is highly relevant to the query and addresses all important aspects. Fluency is excellent, with clear and concise writing.",
+      "judge_model": "llama3.1:8b"
+    },
+    {
+      "faithfulness": 8.5,
+      "groundedness": 9.0,
+      "factual_consistency": 9.2,
+      "relevance": 8.8,
+      "completeness": 7.5,
+      "fluency": 9.5,
+      "overall_score": 8.7,
+      "evaluation_notes": "Good: The response is mostly faithful and grounded in the context, accurately listing the acts restricted by copyright (a-e) from Section 16. However, it erroneously adds a sixth point (f) about adaptations, which is already covered under (e) in the context. This minor hallucination slightly reduces faithfulness and completeness. The explanation of each act is factually consistent with the context, and the response is highly relevant and fluent.",
+      "judge_model": "qwen3:14b"
+    },
+    {
+      "faithfulness": 8.5,
+      "groundedness": 9.0,
+      "factual_consistency": 8.5,
+      "relevance": 9.0,
+      "completeness": 7.5,
+      "fluency": 9.0,
+      "overall_score": 8.6,
+      "evaluation_notes": "Good: The response is mostly faithful to the context, grounded, factually consistent, and relevant. It covers all important aspects but misses some details from the context and lacks a bit in completeness.",
+      "judge_model": "deepseek-r1:14b"
+    },
+    {
+      "faithfulness": 8.5,
+      "groundedness": 9.0,
+      "factual_consistency": 9.2,
+      "relevance": 8.8,
+      "completeness": 7.5,
+      "fluency": 9.5,
+      "overall_score": 8.7,
+      "evaluation_notes": "Good: The response is largely faithful to the provided context. It accurately lists the restricted acts and includes the relevant citation. However, it misses some nuances from Document 3 regarding acts *not* infringing copyright and could be more comprehensive (e.g., mentioning adaptation more explicitly in the explanations). The structure with the table and summary is well-executed, enhancing readability. It does a very good job summarizing the core information.",
+      "judge_model": "gemma3:12b"
+    }
+  ]
+}

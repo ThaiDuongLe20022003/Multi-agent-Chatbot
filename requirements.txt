@@ -1,0 +1,15 @@
+streamlit
+langchain
+langchain-community
+langchain-core
+langchain-text-splitters
+chromadb
+pypdf
+pdfplumber
+ollama
+sentence-transformers
+torch
+transformers
+tiktoken
+faiss-cpu
+langchain-ollama
