@@ -1,0 +1,126 @@
+"""
+Metrics data persistence and storage operations.
+"""
+
+import os
+import json
+import logging
+from datetime import datetime
+from typing import Dict, Any, Optional, List
+
+from data_models.models import LLMMetrics
+from config.settings import METRICS_DIR
+
+
+logger = logging.getLogger(__name__)
+
+
+class MetricsStorage:
+    """Handles storage and retrieval of metrics data"""
+    
+    def __init__(self, metrics_dir: str = None):
+        self.metrics_dir = metrics_dir or METRICS_DIR
+        os.makedirs(self.metrics_dir, exist_ok = True)
+    
+    def save_single_evaluation(self, metric: LLMMetrics) -> str:
+        """Save a single evaluation to JSON file"""
+        filename = f"evaluation_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(metric.query[:20])}.json"
+        filepath = os.path.join(self.metrics_dir, filename)
+        
+        metric_dict = self._dataclass_to_dict(metric)
+        
+        try:
+            with open(filepath, 'w', encoding = 'utf-8') as f:
+                json.dump(metric_dict, f, indent = 2, ensure_ascii = False)
+            logger.info(f"Evaluation saved to {filepath}")
+            return filepath
+        except Exception as e:
+            logger.error(f"Error saving evaluation: {e}")
+            return ""
+    
+    def save_all_metrics(self, metrics: List[LLMMetrics], filename: str = None) -> str:
+        """Save all metrics to a single JSON file"""
+        if not filename:
+            filename = f"llm_metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+        
+        filepath = os.path.join(self.metrics_dir, filename)
+        
+        metrics_dicts = self._prepare_metrics_for_storage(metrics)
+        
+        try:
+            with open(filepath, 'w', encoding = 'utf-8') as f:
+                json.dump(metrics_dicts, f, indent = 2, ensure_ascii = False)
+            logger.info(f"All metrics saved to {filepath}")
+            return filepath
+        except Exception as e:
+            logger.error(f"Error saving all metrics: {e}")
+            return ""
+    
+    def _dataclass_to_dict(self, obj):
+        """Safely convert dataclass to dictionary"""
+        if hasattr(obj, '__dataclass_fields__'):
+            result = {}
+            for field in obj.__dataclass_fields__:
+                value = getattr(obj, field)
+                if isinstance(value, list):
+                    result[field] = [self._dataclass_to_dict(item) if hasattr(item, '__dataclass_fields__') else item for item in value]
+                else:
+                    result[field] = self._dataclass_to_dict(value) if hasattr(value, '__dataclass_fields__') else value
+            return result
+        else:
+            return obj
+    
+    def _prepare_metrics_for_storage(self, metrics: List[LLMMetrics]) -> List[Dict[str, Any]]:
+        """Prepare metrics data for JSON storage"""
+        metrics_dicts = []
+        for metric in metrics:
+            metric_data = {
+                "timestamp": metric.timestamp,
+                "query": metric.query,
+                "response": metric.response[:2000] + "..." if len(metric.response) > 2000 else metric.response,
+                "context_preview": metric.context[:1000] + "..." if len(metric.context) > 1000 else metric.context,
+                "response_time": round(metric.response_time, 2),
+                "token_count": metric.token_count,
+                "tokens_per_second": round(metric.tokens_per_second, 2),
+                "model": metric.model,
+                "session_id": metric.session_id
+            }
+            
+            if metric.evaluations:
+                metric_data["evaluations"] = []
+                for eval_obj in metric.evaluations:
+                    eval_data = {
+                        "faithfulness": round(eval_obj.faithfulness, 1),
+                        "groundedness": round(eval_obj.groundedness, 1),
+                        "factual_consistency": round(eval_obj.factual_consistency, 1),
+                        "relevance": round(eval_obj.relevance, 1),
+                        "completeness": round(eval_obj.completeness, 1),
+                        "fluency": round(eval_obj.fluency, 1),
+                        "overall_score": round(eval_obj.overall_score, 1),
+                        "evaluation_notes": eval_obj.evaluation_notes,
+                        "judge_model": eval_obj.judge_model
+                    }
+                    metric_data["evaluations"].append(eval_data)
+            
+            metrics_dicts.append(metric_data)
+        
+        return metrics_dicts
+    
+    def list_evaluation_files(self) -> List[str]:
+        """List all evaluation files in metrics directory"""
+        evaluation_files = []
+        if os.path.exists(self.metrics_dir):
+            evaluation_files = [f for f in os.listdir(self.metrics_dir) 
+                              if f.endswith('.json') and f.startswith('evaluation_')]
+            evaluation_files.sort(reverse=True)
+        return evaluation_files
+    
+    def load_evaluation_file(self, filename: str) -> Dict[str, Any]:
+        """Load evaluation data from file"""
+        filepath = os.path.join(self.metrics_dir, filename)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception as e:
+            logger.error(f"Error loading evaluation file {filename}: {e}")
+            return {}

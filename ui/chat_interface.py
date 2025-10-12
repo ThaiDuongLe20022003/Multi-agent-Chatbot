@@ -1,84 +1,61 @@
 """
-Streamlit application for PDF-based Retrieval-Augmented Generation (RAG) using Ollama + LangChain with multi-judge evaluation.
-Enhanced with advanced similarity search and comprehensive metrics tracking.
-
-This is the main orchestrator that imports and uses all modular components.
+Chat interface components for the Streamlit application.
 """
 
 import streamlit as st
-import ollama
-import warnings
-import time
 
-# Suppress torch warning
-warnings.filterwarnings('ignore', category = UserWarning, message = '.*torch.classes.*')
-
-# Import modular components
-from config.settings import STREAMLIT_CONFIG
 from data_models.models import ChatMessage
-from evaluation.metrics_collector import MetricsCollector
-from ui.sidebar import render_sidebar, render_metrics_summary
-from ui.chat_interface import render_chat_interface, display_chat_history, handle_user_input
-from ui.pdf_viewer import render_pdf_uploader, render_pdf_viewer, render_delete_button, handle_pdf_upload
-from utils.helpers import extract_model_names, setup_logging, initialize_session_state
-from processing.rag_chain import process_question_simple, process_question_with_agents, count_tokens
-from evaluation.evaluator import LLMJudgeEvaluator
 
-def main():
-    """Main application function"""
-    # Setup application
-    setup_logging()
-    st.set_page_config(**STREAMLIT_CONFIG)
-    initialize_session_state()
-    
-    # Get available models
-    available_models = get_available_models()
-    
-    # Initialize metrics collector
-    if "metrics_collector" not in st.session_state:
-        st.session_state["metrics_collector"] = MetricsCollector()
-    
-    # Create layout
-    col1, col2 = st.columns([1.5, 2])
-    
-    # Render sidebar
-    with st.sidebar:
-        selected_model, evaluation_enabled, judge_evaluator, use_multi_agent = render_sidebar(
-            available_models, 
-            st.session_state.get("selected_model", available_models[0] if available_models else ""),
-            st.session_state["metrics_collector"]
-        )
-        st.session_state["selected_model"] = selected_model
-        st.session_state["evaluation_enabled"] = evaluation_enabled
-        st.session_state["use_multi_agent"] = use_multi_agent
-        st.session_state["judge_evaluator"] = judge_evaluator
-        
-        # Display metrics summary
-        render_metrics_summary(st.session_state["metrics_collector"])
-    
-    # Main content - PDF upload and viewer
-    with col1:
-        file_upload = render_pdf_uploader()
-        handle_pdf_upload(file_upload)
-        render_pdf_viewer()
-        render_delete_button()
-    
-    # Main content - Chat interface
-    with col2:
-        message_container = st.container(height = 500, border = True)
-        
-        # Display chat history
-        display_chat_history(message_container)
-        
-        # Chat input and processing
-        if prompt := st.chat_input("Enter a prompt here...", key="chat_input"):
-            handle_user_input_main(prompt, message_container, st.session_state["vector_db"], 
-                                 st.session_state["selected_model"], st.session_state["evaluation_enabled"],
-                                 st.session_state.get("judge_evaluator"), st.session_state["metrics_collector"],
-                                 st.session_state.get("use_multi_agent", False))
 
-def handle_user_input_main(prompt, message_container, vector_db, selected_model, evaluation_enabled, judge_evaluator, metrics_collector, use_multi_agent):
-    """Handle user input for main application"""
+def render_chat_interface(vector_db, selected_model, evaluation_enabled, judge_evaluator, metrics_collector, use_multi_agent):
+    """Render the main chat interface"""
+    message_container = st.container(height = 500, border = True)
+
+    # Display chat history
+    display_chat_history(message_container)
+
+    # Chat input and processing
+    if prompt := st.chat_input("Enter a prompt here...", key = "chat_input"):
+        handle_user_input(prompt, message_container, vector_db, selected_model, 
+                         evaluation_enabled, judge_evaluator, metrics_collector, use_multi_agent)
+
+
+def display_chat_history(message_container):
+    """Display the chat message history with multi-agent support"""
+    for i, message in enumerate(st.session_state["messages"]):
+        avatar = "🤖" if message.role == "assistant" else "😎"
+        with message_container.chat_message(message.role, avatar = avatar):
+            st.markdown(message.content)
+            
+            # Show multi-agent analyses if available
+            if hasattr(message, 'agent_analyses') and message.agent_analyses:
+                with st.expander("🔍 Multi-Agent Analysis Details"):
+                    st.write("### Specialist Perspectives")
+                    
+                    for agent_analysis in message.agent_analyses:
+                        st.write(f"**{agent_analysis['agent_type'].replace('_', ' ').title()}** "
+                                f"(Confidence: {agent_analysis['confidence']:.0%})")
+                        
+                        with st.expander(f"View {agent_analysis['agent_type']} analysis"):
+                            st.write(agent_analysis['analysis'])
+                    
+                    if hasattr(message, 'consensus_score'):
+                        st.metric("Team Consensus Score", f"{message.consensus_score:.0%}")
+                    
+                    st.info("🤝 Agents collaborated through our horizontal multi-agent system")
+            
+            # Show evaluation scores if available
+            if hasattr(message, 'evaluations') and message.evaluations:
+                if isinstance(message.evaluations[0], dict):
+                    avg_score = sum(eval_obj["overall_score"] for eval_obj in message.evaluations) / len(message.evaluations)
+                else:
+                    avg_score = sum(eval_obj.overall_score for eval_obj in message.evaluations) / len(message.evaluations)
+                st.caption(f"📊 Average Evaluation: {avg_score:.1f}/10.0 ({len(message.evaluations)} judges)")
+
+
+def handle_user_input(prompt, message_container, vector_db, selected_model, 
+                     evaluation_enabled, judge_evaluator, metrics_collector, use_multi_agent):
+    """Handle user input and generate response"""
     try:
         # Add user message to chat
         st.session_state["messages"].append(ChatMessage(role = "user", content = prompt))
@@ -89,6 +66,9 @@ def handle_user_input_main(prompt, message_container, vector_db, selected_model,
         with message_container.chat_message("assistant", avatar = "🤖"):
             with st.spinner("Processing your question..."):
                 if vector_db is not None:
+                    import time
+                    from processing.rag_chain import process_question_with_agents, process_question_simple, count_tokens
+                    
                     start_time = time.time()
                     
                     # Use multi-agent if enabled, otherwise use simple processing
@@ -155,15 +135,3 @@ def handle_user_input_main(prompt, message_container, vector_db, selected_model,
 
     except Exception as e:
         st.error(f"Error: {str(e)}", icon = "⛔️")
-
-def get_available_models():
-    """Get available Ollama models"""
-    try:
-        models_info = ollama.list()
-        return extract_model_names(models_info)
-    except Exception as e:
-        st.error(f"Error connecting to Ollama: {str(e)}")
-        return tuple()
-
-if __name__ == "__main__":
-    main()
