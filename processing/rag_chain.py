@@ -60,14 +60,15 @@ def process_question_simple(question: str, vector_db, selected_model: str) -> Tu
     
     response = chain.invoke(question)
     
-    # Get context for evaluation
+    # Get context for evaluation - THIS WAS THE BUG!
     context_docs = retriever.invoke(question)
     context = "\n\n".join([
         f"Document {i+1}: {doc.page_content[:300]}..."
         for i, doc in enumerate(context_docs[:3])
     ])
     
-    return response, context
+    # RETURN IN CORRECT ORDER: response first, then context
+    return response, context  
 
 
 def generate_response_with_metrics(prompt: str, vector_db, selected_model: str, 
