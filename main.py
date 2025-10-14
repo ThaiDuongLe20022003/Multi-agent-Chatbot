@@ -92,12 +92,13 @@ def handle_user_input_main(prompt, message_container, vector_db, selected_model,
                     start_time = time.time()
                     
                     # Use multi-agent if enabled, otherwise use simple processing
+                    # In main.py - update this section
                     if use_multi_agent:
-                        response, context, extra_data = process_question_with_agents(
+                        context, response, extra_data = process_question_with_agents(
                             prompt, vector_db, selected_model, use_multi_agent = True
                         )
                     else:
-                        response, context = process_question_simple(prompt, vector_db, selected_model)
+                        context, response = process_question_simple(prompt, vector_db, selected_model)  
                         extra_data = {}
                     
                     response_time = time.time() - start_time

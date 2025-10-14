@@ -60,15 +60,13 @@ def process_question_simple(question: str, vector_db, selected_model: str) -> Tu
     
     response = chain.invoke(question)
     
-    # Get context for evaluation - THIS WAS THE BUG!
+    # Get context for evaluation
     context_docs = retriever.invoke(question)
     context = "\n\n".join([
         f"Document {i+1}: {doc.page_content[:300]}..."
         for i, doc in enumerate(context_docs[:3])
     ])
-    
-    # RETURN IN CORRECT ORDER: response first, then context
-    return response, context  
+    return context, response  
 
 
 def generate_response_with_metrics(prompt: str, vector_db, selected_model: str, 
@@ -140,10 +138,11 @@ def process_question_with_agents(question: str, vector_db, selected_model: str,
     if use_multi_agent:
         try:
             from processing.multi_agent_chain import process_question_multi_agent
-            return process_question_multi_agent(question, vector_db, selected_model)
+            context, response, extra_data = process_question_multi_agent(question, vector_db, selected_model)  
+            return context, response, extra_data  
         except ImportError as e:
             logger.warning(f"Multi-agent system not available, falling back to single agent: {e}")
     
     # Fall back to original single-agent processing
-    response, context = process_question_simple(question, vector_db, selected_model)
-    return response, context, {}
+    context, response = process_question_simple(question, vector_db, selected_model)  
+    return context, response, {}  

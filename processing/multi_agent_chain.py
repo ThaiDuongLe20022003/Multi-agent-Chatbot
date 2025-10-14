@@ -20,7 +20,7 @@ def process_question_multi_agent(question: str, vector_db, selected_model: str) 
     
     # 1. Retrieve context (using your existing system)
     from processing.rag_chain import process_question_simple
-    _, context = process_question_simple(question, vector_db, selected_model)
+    context, response = process_question_simple(question, vector_db, selected_model)  # ← Updated assignment
     
     # 2. Set up agent team and communication
     hub = AgentCommunicationHub()
@@ -53,8 +53,8 @@ def process_question_multi_agent(question: str, vector_db, selected_model: str) 
             "confidence": analysis.confidence,
             "refined_analysis": analysis.refined_analysis
         })
-    
-    return final_response, context, {
+
+    return context, final_response, {  
         "multi_agent": True,
         "agent_analyses": agent_analyses_formatted,
         "consensus_score": multi_agent_response.consensus_score,

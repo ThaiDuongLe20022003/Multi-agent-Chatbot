@@ -74,9 +74,27 @@ The DeepLaw system is built on a modular architecture that supports both single-
 
 ### Installation
 
-```bash
-# Install dependencies
-pip install -r requirements.txt
+1. **Install Ollama**
+   ```bash
+   # On macOS/Linux
+   curl -fsSL https://ollama.ai/install.sh | sh
+   
+   # On Windows, download from https://ollama.ai/download
 
-# Launch the application
-streamlit run main.py
+   # Install Ollama models
+   ollama pull <model_name>
+
+2. **Clone the Repository**
+   ```bash
+   git clone https://github.com/ThaiDuongLe20022003/Multi-agent-Chatbot.git
+
+3. **Install Python Dependencies**
+   ```bash
+    apt-get update
+    apt install python3.10-venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+
+4. **Run the Application**
+   ```bash
+    streamlit run main.py
