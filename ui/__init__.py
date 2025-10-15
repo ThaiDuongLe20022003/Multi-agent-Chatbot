@@ -16,7 +16,8 @@ from .sidebar import (
 from .chat_interface import (
     render_chat_interface,
     display_chat_history, 
-    handle_user_input
+    handle_user_input,
+    update_session_with_metrics
 )
 
 from .pdf_viewer import (
@@ -35,7 +36,8 @@ __all__ = [
     # Chat interface functions
     'render_chat_interface',
     'display_chat_history',
-    'handle_user_input',
+    'handle_user_input', 
+    'update_session_with_metrics',
     
     # PDF viewer functions
     'render_pdf_uploader',
@@ -54,7 +56,8 @@ SIDEBAR_COMPONENTS = [
 CHAT_COMPONENTS = [
     'render_chat_interface',
     'display_chat_history',
-    'handle_user_input'
+    'handle_user_input',
+    'update_session_with_metrics'
 ]
 
 PDF_COMPONENTS = [

@@ -1,5 +1,5 @@
 """
-Configuration package for DeepLaw RAG application.
+Configuration package for the application.
 
 This package contains all application settings, constants, and configuration parameters.
 """

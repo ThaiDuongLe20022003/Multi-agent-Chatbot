@@ -5,6 +5,7 @@ Data models for the DeepLaw RAG application.
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
 
+
 @dataclass
 class LLMEvaluation:
     """Comprehensive LLM evaluation metrics using LLM-as-a-judge"""
@@ -17,6 +18,21 @@ class LLMEvaluation:
     overall_score: float  # 0-10: Overall quality score
     evaluation_notes: str  # Detailed explanation from judge
     judge_model: str  # Which model performed this evaluation
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for serialization"""
+        return {
+            "faithfulness": self.faithfulness,
+            "groundedness": self.groundedness,
+            "factual_consistency": self.factual_consistency,
+            "relevance": self.relevance,
+            "completeness": self.completeness,
+            "fluency": self.fluency,
+            "overall_score": self.overall_score,
+            "evaluation_notes": self.evaluation_notes,
+            "judge_model": self.judge_model
+        }
+
 
 @dataclass
 class LLMMetrics:
@@ -32,11 +48,18 @@ class LLMMetrics:
     session_id: str
     evaluations: List[LLMEvaluation]  # Multiple evaluations from different judges
 
+
 @dataclass 
 class ChatMessage:
     """Data class for chat messages"""
     role: str  # 'user' or 'assistant'
     content: str
     evaluations: List[Dict[str, Any]] = field(default_factory = list)
-    agent_analyses: List[Dict[str, Any]] = field(default_factory = list)
-    consensus_score: float = 0.0
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for compatibility"""
+        return {
+            "role": self.role,
+            "content": self.content,
+            "evaluations": self.evaluations
+        }

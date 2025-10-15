@@ -17,7 +17,7 @@ class ReportGenerator:
         
         report_lines = [
             "=== MULTI-JUDGE EVALUATION REPORT ===",
-            f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            f"Session ID: {summary.get('session_id', 'N/A')}",
             f"Total Interactions: {summary['total_interactions']}",
             f"Total Evaluations: {summary['total_evaluations']}",
             f"Unique Judge Models: {summary['unique_judges']}",

@@ -80,9 +80,7 @@ def get_simple_retriever(vector_db: Chroma):
 
 
 def delete_vector_db(vector_db: Optional[Chroma]) -> None:
-    """
-    Delete the vector database and clear related session state.
-    """
+    """Delete the vector database and clear related session state."""
     logger.info("Deleting vector DB")
     if vector_db is not None:
         try:

@@ -4,7 +4,7 @@ RAG chain and response generation functions.
 
 import time
 import logging
-from typing import Tuple, Dict, Any
+from typing import Tuple
 
 from langchain_ollama import ChatOllama
 from langchain.prompts import ChatPromptTemplate
@@ -16,17 +16,6 @@ from processing.document_processor import count_tokens
 
 
 logger = logging.getLogger(__name__)
-
-
-def simple_llm_call(prompt: str, model: str) -> str:
-    """Simple LLM call for agent analyses"""
-    try:
-        llm = ChatOllama(model = model, request_timeout = 120.0)
-        response = llm.invoke(prompt)
-        return response.content
-    except Exception as e:
-        logger.error(f"LLM call failed: {e}")
-        return f"Analysis unavailable due to error: {str(e)}"
 
 
 def process_question_simple(question: str, vector_db, selected_model: str) -> Tuple[str, str]:
@@ -66,12 +55,12 @@ def process_question_simple(question: str, vector_db, selected_model: str) -> Tu
         f"Document {i+1}: {doc.page_content[:300]}..."
         for i, doc in enumerate(context_docs[:3])
     ])
-    return context, response  
+    
+    return response, context
 
 
 def generate_response_with_metrics(prompt: str, vector_db, selected_model: str, 
-                                 evaluation_enabled: bool = False, judge_evaluator = None,
-                                 use_multi_agent: bool = False) -> dict:
+                                 evaluation_enabled: bool, judge_evaluator=None) -> dict:
     """
     Generate response with comprehensive metrics tracking.
     Returns dictionary with response, context, and metrics.
@@ -79,16 +68,7 @@ def generate_response_with_metrics(prompt: str, vector_db, selected_model: str,
     try:
         if vector_db is not None:
             start_time = time.time()
-            
-            # Use multi-agent if enabled, otherwise use simple processing
-            if use_multi_agent:
-                response, context, extra_data = process_question_with_agents(
-                    prompt, vector_db, selected_model, use_multi_agent = True
-                )
-            else:
-                response, context = process_question_simple(prompt, vector_db, selected_model)
-                extra_data = {}
-            
+            response, context = process_question_simple(prompt, vector_db, selected_model)
             response_time = time.time() - start_time
             token_count = count_tokens(response)
             
@@ -100,11 +80,6 @@ def generate_response_with_metrics(prompt: str, vector_db, selected_model: str,
                 "token_count": token_count,
                 "success": True
             }
-            
-            # Add multi-agent data if available
-            if "agent_analyses" in extra_data:
-                result["agent_analyses"] = extra_data["agent_analyses"]
-                result["consensus_score"] = extra_data.get("consensus_score", 0.0)
             
             # Add evaluations if enabled
             if evaluation_enabled and judge_evaluator:
@@ -130,19 +105,3 @@ def generate_response_with_metrics(prompt: str, vector_db, selected_model: str,
             "token_count": 0,
             "success": False
         }
-
-
-def process_question_with_agents(question: str, vector_db, selected_model: str, 
-                               use_multi_agent: bool = False) -> Tuple[str, str, Dict[str, Any]]:
-    """Enhanced processing that can use multi-agent system"""
-    if use_multi_agent:
-        try:
-            from processing.multi_agent_chain import process_question_multi_agent
-            context, response, extra_data = process_question_multi_agent(question, vector_db, selected_model)  
-            return context, response, extra_data  
-        except ImportError as e:
-            logger.warning(f"Multi-agent system not available, falling back to single agent: {e}")
-    
-    # Fall back to original single-agent processing
-    context, response = process_question_simple(question, vector_db, selected_model)  
-    return context, response, {}  

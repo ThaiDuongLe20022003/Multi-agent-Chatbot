@@ -6,7 +6,7 @@ import logging
 import streamlit as st
 from typing import Tuple, Any
 
-from data_models.models import ChatMessage
+from data_models.models import ChatMessage  
 
 
 logger = logging.getLogger(__name__)
@@ -64,9 +64,3 @@ def initialize_session_state():
         st.session_state["file_upload"] = None
     if "pdf_pages" not in st.session_state:
         st.session_state["pdf_pages"] = None
-    if "selected_model" not in st.session_state:
-        st.session_state["selected_model"] = None
-    if "evaluation_enabled" not in st.session_state:
-        st.session_state["evaluation_enabled"] = True
-    if "use_multi_agent" not in st.session_state:
-        st.session_state["use_multi_agent"] = False

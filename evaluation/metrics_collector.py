@@ -2,14 +2,18 @@
 Main metrics collector class - now simplified by delegating to specialized classes.
 """
 
+import logging
+from datetime import datetime  
 from typing import Dict, Any, List, Optional
-from datetime import datetime
 
 from data_models.models import LLMMetrics, LLMEvaluation
 from evaluation.metrics_storage import MetricsStorage
 from evaluation.metrics_analyzer import MetricsAnalyzer
 from evaluation.report_generator import ReportGenerator
-from config.settings import METRICS_DIR
+from config.settings import METRICS_DIR  
+
+
+logger = logging.getLogger(__name__)
 
 
 class MetricsCollector:
@@ -18,6 +22,7 @@ class MetricsCollector:
     def __init__(self, metrics_dir: str = None):
         self.metrics_dir = metrics_dir or METRICS_DIR
         self.metrics_storage = MetricsStorage(self.metrics_dir)
+        self.metrics_analyzer = MetricsAnalyzer()
         self.current_session_metrics: List[LLMMetrics] = []
     
     def record_metrics(self, query: str, response: str, context: str, 
@@ -53,7 +58,7 @@ class MetricsCollector:
     
     def get_session_summary(self) -> Dict[str, Any]:
         """Get comprehensive summary statistics"""
-        return MetricsAnalyzer.calculate_session_summary(self.current_session_metrics)
+        return self.metrics_analyzer.calculate_session_summary(self.current_session_metrics)
     
     def generate_report(self) -> str:
         """Generate a comprehensive evaluation report"""

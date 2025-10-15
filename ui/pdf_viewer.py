@@ -3,10 +3,9 @@ PDF viewer components for the Streamlit application.
 """
 
 import streamlit as st
-import pdfplumber
 
-from processing.vector_db import create_simple_vector_db, delete_vector_db
 from processing.document_processor import extract_all_pages_as_images
+from processing.vector_db import create_simple_vector_db, delete_vector_db
 
 
 def render_pdf_uploader():
@@ -26,8 +25,8 @@ def handle_pdf_upload(file_upload):
             try:
                 st.session_state["vector_db"] = create_simple_vector_db(file_upload)
                 st.session_state["file_upload"] = file_upload
-                # Extract PDF pages as images
-                st.session_state["pdf_pages"] = extract_all_pages_as_images(file_upload)
+                with st.session_state["file_upload"] as pdf_file:
+                    st.session_state["pdf_pages"] = extract_all_pages_as_images(pdf_file)
                 st.success("PDF processed successfully!")
             except Exception as e:
                 st.error(f"Error processing PDF: {str(e)}")

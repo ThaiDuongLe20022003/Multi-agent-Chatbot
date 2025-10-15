@@ -1,5 +1,7 @@
 """
 Evaluation package for DeepLaw RAG application.
+
+This package contains components for multi-judge evaluation and metrics collection.
 """
 
 from .evaluator import LLMJudgeEvaluator

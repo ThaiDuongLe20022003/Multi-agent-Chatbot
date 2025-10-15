@@ -6,7 +6,7 @@ import os
 import json
 import logging
 from datetime import datetime
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional
 
 from data_models.models import LLMMetrics
 from config.settings import METRICS_DIR
@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class MetricsStorage:
     """Handles storage and retrieval of metrics data"""
     
-    def __init__(self, metrics_dir: str = None):
+    def __init__(self, metrics_dir: str = METRICS_DIR):
         self.metrics_dir = metrics_dir or METRICS_DIR
         os.makedirs(self.metrics_dir, exist_ok = True)
     
@@ -38,7 +38,7 @@ class MetricsStorage:
             logger.error(f"Error saving evaluation: {e}")
             return ""
     
-    def save_all_metrics(self, metrics: List[LLMMetrics], filename: str = None) -> str:
+    def save_all_metrics(self, metrics: list, filename: str = None) -> str:
         """Save all metrics to a single JSON file"""
         if not filename:
             filename = f"llm_metrics_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
@@ -70,7 +70,7 @@ class MetricsStorage:
         else:
             return obj
     
-    def _prepare_metrics_for_storage(self, metrics: List[LLMMetrics]) -> List[Dict[str, Any]]:
+    def _prepare_metrics_for_storage(self, metrics: list) -> list:
         """Prepare metrics data for JSON storage"""
         metrics_dicts = []
         for metric in metrics:
@@ -106,7 +106,7 @@ class MetricsStorage:
         
         return metrics_dicts
     
-    def list_evaluation_files(self) -> List[str]:
+    def list_evaluation_files(self) -> list:
         """List all evaluation files in metrics directory"""
         evaluation_files = []
         if os.path.exists(self.metrics_dir):
@@ -119,7 +119,7 @@ class MetricsStorage:
         """Load evaluation data from file"""
         filepath = os.path.join(self.metrics_dir, filename)
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, 'r', encoding = 'utf-8') as f:
                 return json.load(f)
         except Exception as e:
             logger.error(f"Error loading evaluation file {filename}: {e}")

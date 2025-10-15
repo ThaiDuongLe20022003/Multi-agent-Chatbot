@@ -18,13 +18,7 @@ from .document_processor import (
 
 from .rag_chain import (
     process_question_simple,
-    generate_response_with_metrics,
-    process_question_with_agents,
-    simple_llm_call
-)
-
-from .multi_agent_chain import (
-    process_question_multi_agent
+    generate_response_with_metrics
 )
 
 __all__ = [
@@ -39,10 +33,22 @@ __all__ = [
     
     # RAG chain functions
     'process_question_simple',
-    'generate_response_with_metrics',
-    'process_question_with_agents',
-    'simple_llm_call',
-    
-    # Multi-agent functions
-    'process_question_multi_agent'
+    'generate_response_with_metrics'
+]
+
+# Grouped exports for better organization
+VECTOR_DB_FUNCTIONS = [
+    'create_simple_vector_db',
+    'get_simple_retriever', 
+    'delete_vector_db'
+]
+
+DOCUMENT_FUNCTIONS = [
+    'extract_all_pages_as_images',
+    'count_tokens'
+]
+
+RAG_FUNCTIONS = [
+    'process_question_simple',
+    'generate_response_with_metrics'
 ]

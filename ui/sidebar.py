@@ -48,17 +48,11 @@ def render_sidebar(available_models, selected_model, metrics_collector):
         key = "eval_toggle"
     )
     
-    # Multi-agent toggle
-    use_multi_agent = st.toggle(
-        "Enable Multi-Agent Analysis",
-        value = False,
-        help = "Use multiple specialist agents for enhanced legal analysis"
-    )
-    
     # Initialize multi-judge evaluator if needed
     judge_evaluator = None
     if judge_models and evaluation_enabled:
         judge_evaluator = LLMJudgeEvaluator(judge_models)
+        st.session_state["judge_evaluator"] = judge_evaluator
     
     # Metrics actions
     st.header("📊 Evaluation Metrics")
@@ -84,7 +78,7 @@ def render_sidebar(available_models, selected_model, metrics_collector):
     # Saved metrics files section
     render_saved_metrics_section()
     
-    return selected_model, evaluation_enabled, judge_evaluator, use_multi_agent
+    return selected_model, evaluation_enabled, judge_evaluator
 
 
 def render_saved_metrics_section():
