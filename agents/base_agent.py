@@ -7,8 +7,6 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Callable
 from dataclasses import dataclass
 import uuid
-import time
-
 
 @dataclass
 class AgentMessage:
@@ -89,13 +87,13 @@ class BaseAgent(ABC):
         """Send message to peer agent directly - HORIZONTAL COMMUNICATION"""
         if receiver in self.peer_agents:
             message = AgentMessage(
-                message_id=str(uuid.uuid4()),
-                sender=self.name,
-                receiver=receiver,
-                message_type=message_type,
-                content=content,
-                timestamp=self._get_timestamp(),
-                requires_response=requires_response
+                message_id = str(uuid.uuid4()),
+                sender = self.name,
+                receiver = receiver,
+                message_type = message_type,
+                content = content,
+                timestamp = self._get_timestamp(),
+                requires_response = requires_response
             )
             
             # Direct method call to peer agent - TRUE HORIZONTAL
@@ -113,7 +111,7 @@ class BaseAgent(ABC):
         responses = []
         for agent_name in self.peer_agents:
             if agent_name != self.name:  # Don't send to self
-                response = self.send_message(agent_name, message_type, content, requires_response=False)
+                response = self.send_message(agent_name, message_type, content, requires_response = False)
                 if response:
                     responses.append(response)
         return responses
@@ -126,12 +124,12 @@ class BaseAgent(ABC):
                 result = handler(message.content)
                 if message.requires_response:
                     response = AgentMessage(
-                        message_id=str(uuid.uuid4()),
-                        sender=self.name,
-                        receiver=message.sender,
-                        message_type=f"{message.message_type}_response",
-                        content=result,
-                        timestamp=self._get_timestamp()
+                        message_id = str(uuid.uuid4()),
+                        sender = self.name,
+                        receiver = message.sender,
+                        message_type = f"{message.message_type}_response",
+                        content = result,
+                        timestamp = self._get_timestamp()
                     )
                     return response
                 return None
@@ -159,12 +157,12 @@ class BaseAgent(ABC):
     
     def _create_error_response(self, original_message: AgentMessage, error: str) -> AgentMessage:
         return AgentMessage(
-            message_id=str(uuid.uuid4()),
-            sender=self.name,
-            receiver=original_message.sender,
-            message_type="error",
-            content={"error": error, "original_message": original_message.content},
-            timestamp=self._get_timestamp()
+            message_id = str(uuid.uuid4()),
+            sender = self.name,
+            receiver = original_message.sender,
+            message_type = "error",
+            content = {"error": error, "original_message": original_message.content},
+            timestamp = self._get_timestamp()
         )
     
     @abstractmethod
@@ -183,19 +181,19 @@ class BaseAgent(ABC):
     def _create_success_response(self, data: Any, metadata: Dict = None, collaborations: List = None, processing_time: float = 0.0) -> AgentResponse:
         """Helper method for successful responses with collaboration tracking"""
         return AgentResponse(
-            success=True,
-            data=data,
-            metadata=metadata or {},
-            collaborations=collaborations or [],
-            processing_time=processing_time
+            success = True,
+            data = data,
+            metadata = metadata or {},
+            collaborations = collaborations or [],
+            processing_time = processing_time
         )
     
     def _create_error_response(self, error_message: str) -> AgentResponse:
         """Helper method for error responses"""
         return AgentResponse(
-            success=False,
-            data=None,
-            error_message=error_message
+            success = False,
+            data = None,
+            error_message = error_message
         )
     
     def _get_timestamp(self):

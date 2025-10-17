@@ -22,9 +22,9 @@ class DataRetrievalAgent(BaseAgent):
         super().__init__("data_retriever")
         self.vector_db = None
         self.embeddings = HuggingFaceEmbeddings(
-            model_name=DEFAULT_EMBEDDING_MODEL,
-            model_kwargs={'device': 'cpu'},
-            encode_kwargs={'normalize_embeddings': False}
+            model_name = DEFAULT_EMBEDDING_MODEL,
+            model_kwargs = {'device': 'cpu'},
+            encode_kwargs = {'normalize_embeddings': False}
         )
     
     def process(self, context: AgentContext) -> AgentResponse:
@@ -40,7 +40,7 @@ class DataRetrievalAgent(BaseAgent):
                 return self._create_error_response("Vector database not initialized")
             
             # PERFORM SEMANTIC SEARCH
-            relevant_docs = self.vector_db.similarity_search(query, k=4)
+            relevant_docs = self.vector_db.similarity_search(query, k = 4)
             
             # BROADCAST search results to interested peer agents
             broadcast_responses = self.broadcast_message(
@@ -69,9 +69,9 @@ class DataRetrievalAgent(BaseAgent):
             logger.info(f"✅ Data retrieval completed: {len(retrieved_data)} documents, {len(collaborations)} collaborations")
             
             return self._create_success_response(
-                data=result_data,
-                collaborations=collaborations,
-                processing_time=processing_time
+                data = result_data,
+                collaborations = collaborations,
+                processing_time = processing_time
             )
             
         except Exception as e:
@@ -87,7 +87,7 @@ class DataRetrievalAgent(BaseAgent):
             documents = []
             for chunk in chunks:
                 doc = Document(
-                    page_content=chunk["content"],
+                    page_content = chunk["content"],
                     metadata={
                         "page_number": chunk.get("page_number", 1),
                         "chunk_id": chunk.get("chunk_id", ""),
@@ -98,10 +98,10 @@ class DataRetrievalAgent(BaseAgent):
             
             # Create vector store
             self.vector_db = Chroma.from_documents(
-                documents=documents,
-                embedding=self.embeddings,
-                persist_directory=PERSIST_DIRECTORY,
-                collection_name=collection_name
+                documents = documents,
+                embedding = self.embeddings,
+                persist_directory = PERSIST_DIRECTORY,
+                collection_name = collection_name
             )
             
             # ANNOUNCE vector DB availability to peer agents

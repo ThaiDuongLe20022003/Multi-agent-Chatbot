@@ -8,8 +8,6 @@ import time
 
 from data_models.models import ChatMessage
 from processing.rag_chain import generate_response_with_metrics
-from evaluation.metrics_collector import MetricsCollector
-
 
 def render_chat_interface(vector_db, selected_model, evaluation_enabled, judge_evaluator, metrics_collector):
     """Render the main chat interface with horizontal collaboration features"""
@@ -17,13 +15,13 @@ def render_chat_interface(vector_db, selected_model, evaluation_enabled, judge_e
     st.markdown("### 💬 Chat with Horizontal Multi-Agent System")
     st.info("🤖 Your queries are processed by multiple AI agents working together in parallel!")
     
-    message_container = st.container(height=500, border=True)
+    message_container = st.container(height = 500, border = True)
 
     # Display chat history with collaboration insights
     display_chat_history(message_container)
 
     # Chat input and processing
-    if prompt := st.chat_input("Ask about your PDF document...", key="chat_input"):
+    if prompt := st.chat_input("Ask about your PDF document...", key = "chat_input"):
         handle_user_input(prompt, message_container, vector_db, selected_model, 
                          evaluation_enabled, judge_evaluator, metrics_collector)
 
@@ -37,7 +35,7 @@ def display_chat_history(message_container):
     for i, message in enumerate(st.session_state["messages"]):
         avatar = "🤖" if message.role == "assistant" else "😎"
         
-        with message_container.chat_message(message.role, avatar=avatar):
+        with message_container.chat_message(message.role, avatar = avatar):
             st.markdown(message.content)
             
             # Show horizontal collaboration insights if available
@@ -54,7 +52,7 @@ def display_collaboration_insights(message):
         
         if insights:
             # Create an expandable section for collaboration details
-            with st.expander("🔍 Collaboration Details", expanded=False):
+            with st.expander("🔍 Collaboration Details", expanded = False):
                 
                 # Workflow type with icon
                 workflow_type = insights.get('workflow_type', 'unknown')

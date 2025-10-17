@@ -6,9 +6,7 @@ Enhanced with horizontal multi-agent system statistics and visualization.
 import os
 import json
 import streamlit as st
-import ollama
 
-from evaluation.metrics_collector import MetricsCollector
 from evaluation.evaluator import LLMJudgeEvaluator
 from utils.helpers import extract_model_names
 from config.settings import METRICS_DIR
@@ -23,8 +21,8 @@ def render_sidebar(available_models, selected_model, metrics_collector):
         selected_model = st.selectbox(
             "Select Response Model", 
             available_models,
-            key="response_model_select",
-            help="Choose the model that will generate responses to your questions"
+            key = "response_model_select",
+            help = "Choose the model that will generate responses to your questions"
         )
     else:
         st.error("No Ollama models found. Please make sure Ollama is running.")
@@ -47,9 +45,9 @@ def render_sidebar(available_models, selected_model, metrics_collector):
     # Evaluation toggle
     evaluation_enabled = st.toggle(
         "Enable Multi-Judge Evaluation", 
-        value=True,
-        key="eval_toggle",
-        help="Enable horizontal quality assurance with multiple judge models"
+        value = True,
+        key = "eval_toggle",
+        help = "Enable horizontal quality assurance with multiple judge models"
     )
     
     # Initialize multi-judge evaluator if needed
@@ -66,7 +64,7 @@ def render_sidebar(available_models, selected_model, metrics_collector):
     
     if st.button("📈 Show Evaluation Report"):
         report = metrics_collector.generate_report()
-        st.text_area("Evaluation Report", report, height=300)
+        st.text_area("Evaluation Report", report, height = 300)
     
     if st.button("💾 Save All Metrics to File"):
         if metrics_collector.current_session_metrics:
@@ -123,7 +121,7 @@ def render_horizontal_system_metrics():
             st.subheader("👥 Agent Usage Distribution")
             total_executions = stats["total_executions"]
             
-            for agent, count in sorted(stats["agent_usage"].items(), key=lambda x: x[1], reverse=True):
+            for agent, count in sorted(stats["agent_usage"].items(), key = lambda x: x[1], reverse = True):
                 usage_percent = (count / total_executions) * 100 if total_executions > 0 else 0
                 progress_bar = st.progress(0)
                 progress_bar.progress(min(usage_percent / 100, 1.0))
@@ -136,7 +134,7 @@ def render_horizontal_system_metrics():
             for workflow in stats["workflow_types"]:
                 workflow_counts[workflow] = workflow_counts.get(workflow, 0) + 1
             
-            for workflow, count in sorted(workflow_counts.items(), key=lambda x: x[1], reverse=True):
+            for workflow, count in sorted(workflow_counts.items(), key = lambda x: x[1], reverse = True):
                 workflow_name = workflow.replace('_', ' ').title()
                 st.write(f"• **{workflow_name}**: {count} times")
         
@@ -218,7 +216,7 @@ def render_saved_metrics_section():
             if st.button("👀 View Selected Evaluation"):
                 filepath = os.path.join(METRICS_DIR, selected_file)
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
+                    with open(filepath, 'r', encoding = 'utf-8') as f:
                         data = json.load(f)
                         st.json(data)
                 except Exception as e:
@@ -228,13 +226,13 @@ def render_saved_metrics_section():
             if st.button("📥 Download Selected Evaluation"):
                 filepath = os.path.join(METRICS_DIR, selected_file)
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
+                    with open(filepath, 'r', encoding = 'utf-8') as f:
                         data = f.read()
                         st.download_button(
-                            label="Download JSON",
-                            data=data,
-                            file_name=selected_file,
-                            mime="application/json"
+                            label = "Download JSON",
+                            data = data,
+                            file_name = selected_file,
+                            mime = "application/json"
                         )
                 except Exception as e:
                     st.error(f"Error reading file: {e}")

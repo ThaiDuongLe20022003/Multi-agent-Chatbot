@@ -75,7 +75,7 @@ class QualityAssuranceAgent(BaseAgent):
             
             # Initialize LLMs for each judge model
             for model_name in self.judge_models:
-                self.llms[model_name] = ChatOllama(model=model_name, temperature=0.1, request_timeout=120.0)
+                self.llms[model_name] = ChatOllama(model = model_name, temperature = 0.1, request_timeout = 120.0)
             
             logger.info(f"Quality assurance agent initialized with {len(self.judge_models)} judge models: {self.judge_models}")
             
@@ -138,9 +138,9 @@ class QualityAssuranceAgent(BaseAgent):
             logger.info(f"✅ QA completed: {len(qa_results)} judges, {len(collaborations)} collaborations")
             
             return self._create_success_response(
-                data=result_data,
-                collaborations=collaborations,
-                processing_time=processing_time
+                data = result_data,
+                collaborations = collaborations,
+                processing_time = processing_time
             )
             
         except Exception as e:
@@ -374,9 +374,9 @@ class QualityAssuranceAgent(BaseAgent):
                 enhanced_context = self._enhance_validation_context(source_context, validation_inputs)
                 
                 prompt = self.qa_prompt.format(
-                    query=query,
-                    proposed_response=proposed_response,
-                    source_context=enhanced_context[:2000]  # Limit context length
+                    query = query,
+                    proposed_response = proposed_response,
+                    source_context = enhanced_context[:2000]  # Limit context length
                 )
                 
                 response = llm.invoke(prompt)

@@ -60,7 +60,7 @@ class AgentManager:
         start_time = time.time()
         logger.info(f"🚀 Executing HORIZONTAL workflow for: {query}")
         
-        context = AgentContext(query=query, session_id=session_id)
+        context = AgentContext(query = query, session_id = session_id)
         collaboration_log = []
         
         try:
@@ -86,13 +86,13 @@ class AgentManager:
             logger.error(f"❌ Horizontal workflow failed: {e}")
             processing_time = time.time() - start_time
             return WorkflowResult(
-                success=False,
-                final_response=f"Horizontal workflow failed: {str(e)}",
-                agent_responses={},
-                errors=[f"System error: {str(e)}"],
-                processing_time=processing_time,
-                collaboration_log=collaboration_log,
-                workflow_type="horizontal_error"
+                success = False,
+                final_response = f"Horizontal workflow failed: {str(e)}",
+                agent_responses = {},
+                errors = [f"System error: {str(e)}"],
+                processing_time = processing_time,
+                collaboration_log = collaboration_log,
+                workflow_type = "horizontal_error"
             )
     
     def _analyze_query_type(self, query: str) -> str:
@@ -172,14 +172,14 @@ class AgentManager:
         processing_time = time.time() - start_time
         
         return WorkflowResult(
-            success=bool(final_response),
-            final_response=final_response,
-            agent_responses=agent_responses,
-            errors=[],
-            processing_time=processing_time,
-            collaboration_log=collaboration_log,
-            workflow_type="horizontal_parallel",
-            parallel_execution=True
+            success = bool(final_response),
+            final_response = final_response,
+            agent_responses = agent_responses,
+            errors = [],
+            processing_time = processing_time,
+            collaboration_log = collaboration_log,
+            workflow_type = "horizontal_parallel",
+            parallel_execution = True
         )
     
     def _execute_legal_collaboration(self, query: str, context: AgentContext, start_time: float, collaboration_log: List) -> WorkflowResult:
@@ -244,13 +244,13 @@ class AgentManager:
         processing_time = time.time() - start_time
         
         return WorkflowResult(
-            success=bool(final_response),
-            final_response=final_response,
-            agent_responses=agent_responses,
-            errors=[],
-            processing_time=processing_time,
-            collaboration_log=collaboration_log,
-            workflow_type="horizontal_legal"
+            success = bool(final_response),
+            final_response = final_response,
+            agent_responses = agent_responses,
+            errors = [],
+            processing_time = processing_time,
+            collaboration_log = collaboration_log,
+            workflow_type = "horizontal_legal"
         )
     
     def _orchestrate_dynamic_collaboration(self, query: str, context: AgentContext, agent_responses: Dict, collaboration_log: List) -> str:
@@ -335,7 +335,7 @@ class AgentManager:
                             "data_summary": str(result.data)[:500] + "..." if len(str(result.data)) > 500 else str(result.data),
                             "timestamp": self._get_timestamp()
                         },
-                        requires_response=False
+                        requires_response = False
                     )
                     if share_message:
                         collaboration_log.append(share_message)
@@ -487,14 +487,14 @@ class AgentManager:
         processing_time = time.time() - start_time
         
         return WorkflowResult(
-            success=bool(final_response),
-            final_response=final_response,
-            agent_responses=agent_responses,
-            errors=[],
-            processing_time=processing_time,
-            collaboration_log=collaboration_log,
-            workflow_type="horizontal_simple",
-            parallel_execution=True
+            success = bool(final_response),
+            final_response = final_response,
+            agent_responses = agent_responses,
+            errors = [],
+            processing_time = processing_time,
+            collaboration_log = collaboration_log,
+            workflow_type = "horizontal_simple",
+            parallel_execution = True
         )
     
     def _execute_comprehensive_collaboration(self, query: str, context: AgentContext, start_time: float, collaboration_log: List) -> WorkflowResult:

@@ -4,7 +4,7 @@ Main metrics collector class - now simplified by delegating to specialized class
 
 import logging
 from datetime import datetime  
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 from data_models.models import LLMMetrics, LLMEvaluation
 from evaluation.metrics_storage import MetricsStorage

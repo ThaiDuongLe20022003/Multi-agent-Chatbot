@@ -50,7 +50,7 @@ class SummarizeReasonAgent(BaseAgent):
     def initialize_model(self, model_name: str):
         """Initialize the LLM with the selected model"""
         try:
-            self.llm = ChatOllama(model=model_name, temperature=0.1, request_timeout=120.0)
+            self.llm = ChatOllama(model = model_name, temperature = 0.1, request_timeout = 120.0)
             logger.info(f"Summarize reason agent initialized with model: {model_name}")
         except Exception as e:
             logger.error(f"Failed to initialize summarize reason agent with model {model_name}: {e}")
@@ -115,9 +115,9 @@ class SummarizeReasonAgent(BaseAgent):
             logger.info(f"✅ Synthesis completed: {len(synthesized_response)} chars, {len(collaborations)} collaborations")
             
             return self._create_success_response(
-                data=result_data,
-                collaborations=collaborations,
-                processing_time=processing_time
+                data = result_data,
+                collaborations = collaborations,
+                processing_time = processing_time
             )
             
         except Exception as e:
@@ -351,9 +351,9 @@ class SummarizeReasonAgent(BaseAgent):
                 legal_text = legal_analysis
             
             prompt = self.synthesis_prompt.format(
-                query=query,
-                legal_analysis=legal_text[:2000] if legal_text else "No legal analysis available",
-                supporting_docs=supporting_docs
+                query = query,
+                legal_analysis = legal_text[:2000] if legal_text else "No legal analysis available",
+                supporting_docs = supporting_docs
             )
             
             response = self.llm.invoke(prompt)

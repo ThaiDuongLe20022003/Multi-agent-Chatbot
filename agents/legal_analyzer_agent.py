@@ -48,7 +48,7 @@ class LegalAnalyzerAgent(BaseAgent):
     def initialize_model(self, model_name: str):
         """Initialize the LLM with the selected model"""
         try:
-            self.llm = ChatOllama(model=model_name, temperature=0.1, request_timeout=120.0)
+            self.llm = ChatOllama(model = model_name, temperature = 0.1, request_timeout = 120.0)
             logger.info(f"Legal analyzer agent initialized with model: {model_name}")
         except Exception as e:
             logger.error(f"Failed to initialize legal analyzer with model {model_name}: {e}")
@@ -116,9 +116,9 @@ class LegalAnalyzerAgent(BaseAgent):
             logger.info(f"✅ Legal analysis completed: {len(legal_analysis)} chars, {len(collaborations)} collaborations")
             
             return self._create_success_response(
-                data=result_data,
-                collaborations=collaborations,
-                processing_time=processing_time
+                data = result_data,
+                collaborations = collaborations,
+                processing_time = processing_time
             )
             
         except Exception as e:

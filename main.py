@@ -7,7 +7,7 @@ import streamlit as st
 import ollama
 import warnings
 import time
-from typing import List, Tuple
+from typing import List
 
 # Suppress torch warning
 warnings.filterwarnings('ignore', category=UserWarning, message='.*torch.classes.*')
@@ -253,9 +253,9 @@ def handle_pdf_upload_horizontal(file_upload):
                 # Create context for PDF processing
                 from agents.base_agent import AgentContext
                 context = AgentContext(
-                    query="process_pdf",
-                    session_id="pdf_upload",
-                    metadata={"pdf_file": file_upload, "has_pdf": True}
+                    query = "process_pdf",
+                    session_id = "pdf_upload",
+                    metadata = {"pdf_file": file_upload, "has_pdf": True}
                 )
                 
                 # Process PDF with horizontal agent
@@ -292,13 +292,13 @@ def handle_pdf_upload_horizontal(file_upload):
 
 def render_chat_interface_horizontal(selected_model, evaluation_enabled, judge_evaluator, metrics_collector):
     """Chat interface using horizontal multi-agent system"""
-    message_container = st.container(height=500, border=True)
+    message_container = st.container(height = 500, border = True)
 
     # Display chat history
     display_chat_history_horizontal(message_container)
 
     # Chat input and processing
-    if prompt := st.chat_input("Ask about your PDF document...", key="chat_input_horizontal"):
+    if prompt := st.chat_input("Ask about your PDF document...", key = "chat_input_horizontal"):
         handle_user_input_horizontal(prompt, message_container, selected_model,
                                    evaluation_enabled, judge_evaluator, metrics_collector)
 
@@ -339,13 +339,13 @@ def handle_user_input_horizontal(prompt, message_container, selected_model,
     """Handle user input using horizontal multi-agent system"""
     try:
         # Add user message to chat
-        st.session_state["messages"].append(ChatMessage(role="user", content=prompt))
+        st.session_state["messages"].append(ChatMessage(role = "user", content = prompt))
         
-        with message_container.chat_message("user", avatar="😎"):
+        with message_container.chat_message("user", avatar = "😎"):
             st.markdown(prompt)
 
         # Process with horizontal multi-agent system
-        with message_container.chat_message("assistant", avatar="🤖"):
+        with message_container.chat_message("assistant", avatar = "🤖"):
             with st.spinner("🤖 Horizontal agents are collaborating..."):
                 start_time = time.time()
                 
@@ -382,7 +382,7 @@ def handle_user_input_horizontal(prompt, message_container, selected_model,
                     else:
                         # Create ChatMessage with horizontal insights
                         assistant_message = ChatMessage(
-                            role="assistant",
+                            role = "assistant",
                             content=result.final_response
                         )
                         # Add horizontal insights to metadata
@@ -410,11 +410,11 @@ def handle_user_input_horizontal(prompt, message_container, selected_model,
                     error_msg = f"❌ Horizontal system error: {', '.join(result.errors)}"
                     st.markdown(error_msg)
                     st.session_state["messages"].append(
-                        ChatMessage(role="assistant", content=error_msg)
+                        ChatMessage(role = "assistant", content = error_msg)
                     )
 
     except Exception as e:
-        st.error(f"❌ Error in horizontal system: {str(e)}", icon="⛔️")
+        st.error(f"❌ Error in horizontal system: {str(e)}", icon = "⛔️")
 
 
 def update_session_with_metrics_horizontal(prompt, response, response_time, selected_model,
@@ -429,14 +429,14 @@ def update_session_with_metrics_horizontal(prompt, response, response_time, sele
         
         # Record metrics
         metrics = metrics_collector.record_metrics(
-            query=prompt,
-            response=response,
-            context=context,
-            response_time=response_time,
-            token_count=len(response.split()),
-            model=selected_model,
-            session_id="streamlit_session",
-            evaluations=evaluations
+            query = prompt,
+            response = response,
+            context = context,
+            response_time = response_time,
+            token_count = len(response.split()),
+            model = selected_model,
+            session_id = "streamlit_session",
+            evaluations = evaluations
         )
         
         # Convert evaluations to dictionaries for session state storage
@@ -456,9 +456,9 @@ def update_session_with_metrics_horizontal(prompt, response, response_time, sele
         
         # Create ChatMessage object with evaluations and horizontal insights
         assistant_message = ChatMessage(
-            role="assistant",
-            content=response,
-            evaluations=eval_dicts
+            role = "assistant",
+            content = response,
+            evaluations = eval_dicts
         )
         # Add horizontal insights to metadata
         assistant_message.metadata = {"horizontal_insights": horizontal_insights}
@@ -468,7 +468,7 @@ def update_session_with_metrics_horizontal(prompt, response, response_time, sele
     except Exception as e:
         st.error(f"Error recording metrics: {e}")
         # Fallback: create message without evaluations
-        assistant_message = ChatMessage(role="assistant", content=response)
+        assistant_message = ChatMessage(role = "assistant", content = response)
         assistant_message.metadata = {"horizontal_insights": horizontal_insights}
         st.session_state["messages"].append(assistant_message)
 
@@ -477,8 +477,8 @@ def render_delete_button_horizontal():
     """Delete button using horizontal agent system"""
     delete_collection = st.button(
         "⚠️ Delete collection",
-        type="secondary",
-        key="delete_button_horizontal"
+        type = "secondary",
+        key = "delete_button_horizontal"
     )
 
     if delete_collection:

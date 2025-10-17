@@ -23,9 +23,9 @@ class PDFProcessingAgent(BaseAgent):
     def __init__(self):
         super().__init__("pdf_processor")
         self.text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=DEFAULT_CHUNK_SIZE,
-            chunk_overlap=DEFAULT_CHUNK_OVERLAP,
-            length_function=len
+            chunk_size = DEFAULT_CHUNK_SIZE,
+            chunk_overlap = DEFAULT_CHUNK_OVERLAP,
+            length_function = len
         )
     
     def process(self, context: AgentContext) -> AgentResponse:
@@ -67,9 +67,9 @@ class PDFProcessingAgent(BaseAgent):
             logger.info(f"✅ PDF processing completed: {len(chunks)} chunks, {len(collaborations)} collaborations")
             
             return self._create_success_response(
-                data=result_data,
-                collaborations=collaborations,
-                processing_time=processing_time
+                data = result_data,
+                collaborations = collaborations,
+                processing_time = processing_time
             )
             
         except Exception as e:
@@ -110,7 +110,7 @@ class PDFProcessingAgent(BaseAgent):
             raise
         finally:
             # Cleanup temp directory
-            shutil.rmtree(temp_dir, ignore_errors=True)
+            shutil.rmtree(temp_dir, ignore_errors = True)
     
     def _handle_data_request(self, content: Dict) -> Dict:
         """
